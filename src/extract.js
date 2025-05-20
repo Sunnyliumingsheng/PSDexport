@@ -23,11 +23,6 @@ async function recursionExtractPNG(docId, layers, folder) {
     for (const layer of layers) {
         try {
             if (layer.kind == "group") {
-                if (layer.name=="SP_Cmn_Tab01_XuanZhong"){
-                    layer.layers.forEach(elementLayer => {
-                        console.log(elementLayer)
-                    });
-                }
                 await recursionExtractPNG(docId, layer.layers, folder)
             }
             if (layer.kind == "smartObject") {
