@@ -2,13 +2,20 @@ const config = require('./config/config.js')
 const host = require('uxp').host;
 const listenActiveLayerChangeCallback = require("./src./Layer/ListenActiveLayerChangeCallback.js").listenActiveLayerChangeCallback
 const listenActiveLayerChangeEvent = require("./src/Layer/listenActiveLayerChangeEvent.js").listenActiveLayerChangeEvent
-
+const loadPage = require("./src/loadPage.js").loadPage
 
 function main() {
 
+  // 加载首页
+
+  document.getElementById("loadPageOutput").addEventListener("click", function outputPage() {
+    loadPage("output")
+  })
+  loadPage("index")
 
   // 循环事件处理
   listenActiveLayerChangeEvent(listenActiveLayerChangeCallback);
+
 }
 
 async function test() {

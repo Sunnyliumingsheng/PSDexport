@@ -1,14 +1,20 @@
-const getActiveLayer=require("./getActiveLayer.js").getActiveLayer;
-const getLayerInfo=require("./getLayerInfo.js").getLayerInfo;
+const getActiveLayer = require("./getActiveLayer.js").getActiveLayer;
+const loadPage= require("../loadPage.js").loadPage;
 
-
-function listenActiveLayerChangeCallback(){
-    const layer=getActiveLayer();
-    if(layer==null){
-        return
-    }else{
-        console.log(layer);
-        // todo 根据这里的layerinfo进行页面的跳转操作
+function listenActiveLayerChangeCallback() {
+    try {
+        const layer = getActiveLayer();
+        if (layer == null) {
+            return
+        } else {
+            console.log(layer);
+            navigateToLayerPage(layer.kind)
+        }
+    } catch (err) {
+        console.log(err)
     }
 }
-module.exports={listenActiveLayerChangeCallback}
+function navigateToLayerPage(layerKind) {
+    loadPage(layerKind)
+}
+module.exports = { listenActiveLayerChangeCallback }

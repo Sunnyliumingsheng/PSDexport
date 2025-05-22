@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>PSD工具</title>
   <script src="main.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
+<body>
+  <div id="index" class="view">
+    这里是首页
+  </div>
+  <div id="output" class="view">
+    <sp-heading>图层工具</sp-heading>
+    <div class="button-group">
+      <sp-button id="btnExport">导出图层数据到文件夹</sp-button>
+    </div>
+    <sp-heading>图片提取</sp-heading>
+    <div class="button-group">
+      <sp-button id="btnExtractPNG">提取所有图片到文件夹</sp-button>
+    </div>
+    <sp-heading>一键格栅化所有矢量图层</sp-heading>
+    <div class="button-group">
+      <sp-button id="btnRasterizing">一键格栅化</sp-button>
+    </div>
+    <sp-heading>一键格栅化所有智能对象图层</sp-heading>
+    <div class="button-group">
+      <sp-button id="btnRasterizingSmartObject">一键格栅化智能图层</sp-button>
+    </div>
+  </div>
+
+  <div id="pixel" class="view">
+
+  </div>
+  <div id="smartObject" class="view">
+    <h1>Smart Object</h1>
+        <p>智能对象暂时不支持</p>
+  </div>
+  <sp-button id="loadPageOutput">
+    结束设计，开始导出
+  </sp-button>
 </body>
+
 </html>
