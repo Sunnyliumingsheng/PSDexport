@@ -1,29 +1,24 @@
 const config = require('./config/config.js')
-const fs = require('uxp').storage.localFileSystem
-const path = require('path')
-const core = require('photoshop').core
-const app = require('photoshop').app
 const host = require('uxp').host;
-const batchPlay = require("photoshop").batchPlay
-const handler = require("./src/handler.js")
-const extracter = require("./src/extract.js")
-const rasterize = require("./src/rasterize.js")
+const listenActiveLayerChangeCallback = require("./src./Layer/ListenActiveLayerChangeCallback.js").listenActiveLayerChangeCallback
+const listenActiveLayerChangeEvent = require("./src/Layer/listenActiveLayerChangeEvent.js").listenActiveLayerChangeEvent
+
 
 function main() {
-  document.getElementById("btnExport").addEventListener("click", handler.exportLayerData);
-  document.getElementById("btnExtractPNG").addEventListener("click", extracter.extractAllPNG);
-  document.getElementById("btnRasterizing").addEventListener("click", rasterize.rasterizing);
-  document.getElementById("btnRasterizingSmartObject").addEventListener("click", rasterize.rasterizingSmartObject);
+
+
+  // 循环事件处理
+  listenActiveLayerChangeEvent(listenActiveLayerChangeCallback);
 }
 
 async function test() {
 }
 
 
+////////////////////////////////////////// ignore below
 
 if (config.testMode) {
   console.log("test:");
-
   try {
     test()
   } catch (err) {
