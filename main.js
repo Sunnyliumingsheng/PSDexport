@@ -1,6 +1,6 @@
 const config = require('./config/config.js').config;
 const host = require('uxp').host;
-const listenActiveLayerChangeCallback = require("./src./Layer/ListenActiveLayerChangeCallback.js").listenActiveLayerChangeCallback
+const listenActiveLayerChangeCallback = require("./src/Layer/ListenActiveLayerChangeCallback.js").listenActiveLayerChangeCallback
 const listenActiveLayerChangeEvent = require("./src/Layer/listenActiveLayerChangeEvent.js").listenActiveLayerChangeEvent
 const loadPage = require("./src/loadPage.js").loadPage
 

@@ -7,7 +7,15 @@
             "description":"如果这个组需要被复制使用或动态生成最好标记为prefab",
             "appearance":"标记为prefab",
             "type":"checkbox",
-            "parameters":[]
+            "parameters":[
+                {
+                    "name":"name",
+                    "description":"这个prefab的名字",
+                    "appearance":"prefab名称",
+                    "type":"text",
+                    "default":"默认参数名"
+                }
+            ]
         },
         {
             "name":"button",

@@ -7,7 +7,6 @@ function listenActiveLayerChangeCallback() {
         if (layer == null) {
             return
         } else {
-            console.log(layer);
             navigateToLayerPage(layer.kind)
         }
     } catch (err) {
