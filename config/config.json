@@ -1,0 +1,67 @@
+{
+    "testMode":true,
+    "components":{
+     "group":[
+        {
+            "name":"prefab",
+            "description":"如果这个组需要被复制使用或动态生成最好标记为prefab",
+            "appearance":"标记为prefab",
+            "type":"checkbox",
+            "parameters":[]
+        },
+        {
+            "name":"button",
+            "description":"这个组将成为一个按钮",
+            "appearance":"设置为按钮",
+            "type":"checkbox",
+            "parameters":[
+
+            ]
+        }
+     ],
+     "text":[
+        
+     ]
+    },
+    "default":{
+        "buttonClickEffect":{
+            "EnableClickEffect":true,
+            "description":"是否启用点击效果脚本",
+            "componentName":"ButtonClickEffect"
+        },
+        "buttonComponent":{
+            "useComponent":true,
+            "description":"按钮有两种常见的实现方式一种是用buttonTemplate预制体一种是直接使用button的组件,暂时不支持buttonTemplate",
+            "prefabPath":"unsupport"
+        }
+    },
+    "fontAssets":[
+        {
+            "name":"default",
+            "description":"默认字体",
+            "path":"Assets/GameAssets/ABNew/Font/SLG main text/SLG main text SDF.asset"
+        },{
+            "name":"title",
+            "description":"标题字体",
+            "path":"Assets/GameAssets/ABNew/Font/SLGTitle/SLGTitle.ttf"
+        },
+        {
+            "name":"supercell",
+            "description":"SVN-supercell字体",
+            "path":"Assets/GameAssets/ABNew/Font/SLG_new_text/SVN-Supercell_Magic_SDF.asset"
+        }
+    ],
+    "materialPreset":[
+        {
+            "name":"shadow",
+            "description":"描边预设",
+            "path":"Assets/GameAssets/ABNew/Font/SLGTitle/SLGTitle miaobian1.mat"
+        },
+        {
+            "name":"yellow",
+            "description":"黄色艺术字预设",
+            "path":"Assets/GameAssets/ABNew/Font/SLGTitle/SLGTitle yishuzi01.mat"
+        }
+    ]
+
+}

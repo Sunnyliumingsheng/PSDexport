@@ -1,4 +1,4 @@
-const config = require('./config/config.js')
+const config = require('./config/config.js').config;
 const host = require('uxp').host;
 const listenActiveLayerChangeCallback = require("./src./Layer/ListenActiveLayerChangeCallback.js").listenActiveLayerChangeCallback
 const listenActiveLayerChangeEvent = require("./src/Layer/listenActiveLayerChangeEvent.js").listenActiveLayerChangeEvent
@@ -17,15 +17,13 @@ function main() {
   listenActiveLayerChangeEvent(listenActiveLayerChangeCallback);
 
 }
+function test() {
 
-async function test() {
 }
-
 
 ////////////////////////////////////////// ignore below
 
 if (config.testMode) {
-  console.log("test:");
   try {
     test()
   } catch (err) {

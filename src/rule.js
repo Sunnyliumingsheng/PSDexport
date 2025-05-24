@@ -82,11 +82,21 @@ function getParesedName(name) {
   const parsedRule = parseRule(name);
   return parsedRule.name;
 }
-
+function revertParsedName(result){
+  let name=`${result.name}/${result.transform}`;
+  result.components.forEach(comp => {
+    name+=`>${comp.name}`;
+    Object.keys(comp.parameters).forEach(key => {
+      name+=`/${key}:${comp.parameters[key]}`;
+    });
+  });
+  return name;
+}
 
 
 
 module.exports = {
   parseRule,
-  getParesedName
+  getParesedName,
+  revertParsedName
 };
