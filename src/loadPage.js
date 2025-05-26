@@ -1,16 +1,22 @@
+const { getLayerFullInfo } = require("./layer.js");
+const { getActiveLayer } = require("./Layer/getActiveLayer.js");
+
 const outputListen = require("./output/output.js").listen
 const loadComponent = require("./GeneralHandle/laodComponent.js").loadComponent
-
+const doc=require("photoshop").app.activeDocument
 
 function loadPage(id) {
     if (id != "output") {
         //将所有的div都设置为不可见
+        const activeLayer=getActiveLayer()
+        const layer=getLayerFullInfo(activeLayer.id,activeLayer._docId)
+        const layerName=layer.name
         document.querySelectorAll('.view').forEach(div => {
             div.style.display = 'none'
             div.innerHTML = ""
         });
         document.getElementById(id).style.display = 'block';
-        loadComponent(id)
+        loadComponent(id,layerName)
     }
     else {
         document.querySelectorAll('.view').forEach(div => {

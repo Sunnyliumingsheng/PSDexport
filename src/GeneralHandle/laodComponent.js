@@ -1,9 +1,14 @@
+const { getActiveLayer } = require("../Layer/getActiveLayer.js")
+
 const config = require("../../config/config.js").config
 const generalComponentCallback = require("./generalCallback.js").generalComponentCallback
 const generalParameterCallback = require("./generalCallback.js").generalParameterCallback
 const getParameterValue = require("../Tag/getParameterValue.js").getParameterValue
+const generalInitComponent = require("./generalInit.js").generalInitComponent
+const generalInitParameter = require("./generalInit.js").generalInitParameter
 
-function loadComponent(id) {
+function loadComponent(id,layerName) {
+
     const div = document.getElementById(id)
     let componentList = null;
     Object.entries(config.components).forEach(([category, items]) => {
@@ -26,6 +31,7 @@ function loadComponent(id) {
         const componentLabel = document.createElement("label")
         componentLabel.innerHTML = component.appearance
         generalComponentCallback(componentElement, component)
+        generalInitComponent(layerName, componentElement)
         newDiv.appendChild(componentElement)
         newDiv.appendChild(componentLabel)
         component.parameters.forEach((parameter) => {
@@ -41,6 +47,7 @@ function loadComponent(id) {
             }
             const parameterLabel = document.createElement("label")
             parameterLabel.innerHTML = parameter.appearance
+            generalInitParameter(layerName,componentElement, parameterElement)
             generalParameterCallback(component,parameterElement, parameter)
             newDiv.appendChild(parameterLabel)
             newDiv.appendChild(parameterElement)

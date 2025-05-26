@@ -38,6 +38,8 @@ function checkboxComponentCallback(newElement, configInfo) {
         if (layer != null) {
             if (this.checked) {
                 let newName = addComponent(layer.name, configInfo.name)
+                for(let i = 0; i < configInfo.parameters.length; i++) {                    
+                }
                 renameLayer(layer, newName)
             } else {
                 let newName = deleteComponent(layer.name, configInfo.name)
@@ -46,6 +48,11 @@ function checkboxComponentCallback(newElement, configInfo) {
         }
         console.log("change")
     });
+}
+
+// 自动填充组件参数的默认值
+function autoFillParameterDefaultValue(parameterElement, parameterConfigInfo) {
+    
 }
 
 
