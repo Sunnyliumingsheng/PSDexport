@@ -26,7 +26,7 @@ function textParameterCallback(componentElement, newElement, ParameterConfigInfo
     newElement.addEventListener("input", function () {
         let layer = getActiveLayer()
         if (layer != null) {
-            let newName = updateParameter(layer.name,componentElement.name, ParameterConfigInfo.name, newElement.value)
+            let newName = updateParameter(layer.name, componentElement.name, ParameterConfigInfo.name, newElement.value)
             renameLayer(layer, newName)
         }
     });
@@ -38,9 +38,12 @@ function checkboxComponentCallback(newElement, configInfo) {
         if (layer != null) {
             if (this.checked) {
                 let newName = addComponent(layer.name, configInfo.name)
-                for(let i = 0; i < configInfo.parameters.length; i++) {                    
+
+                for (let i = 0; i < configInfo.parameters.length; i++) {
+                    newName = autoFillParameterDefaultValue(newName, configInfo.name,configInfo.parameters[i])
                 }
                 renameLayer(layer, newName)
+
             } else {
                 let newName = deleteComponent(layer.name, configInfo.name)
                 renameLayer(layer, newName)
@@ -51,8 +54,13 @@ function checkboxComponentCallback(newElement, configInfo) {
 }
 
 // 自动填充组件参数的默认值
-function autoFillParameterDefaultValue(parameterElement, parameterConfigInfo) {
-    
+function autoFillParameterDefaultValue(oldName, componentName, parameterConfigInfo) {
+    console.log("parameter config info", parameterConfigInfo)
+    const newElement = document.getElementById("parameter_" + parameterConfigInfo.name)
+    console.log("parameter element", newElement)
+    let newName = updateParameter(oldName, componentName, parameterConfigInfo.name, parameterConfigInfo.default)
+    return newName
+
 }
 
 
