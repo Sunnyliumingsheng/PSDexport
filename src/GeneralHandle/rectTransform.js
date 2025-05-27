@@ -1,19 +1,17 @@
+const getLayerInfo=require("../Layer/getLayerInfo.js").getLayerInfo
+const doc=require("photoshop").app.activeDocument
 ///////////////这些是处理rectTransform的函数/////////////////////
 // 处理名字和rectTransform
-async function handleRectTransform(layerDesc, docId, result) {
+async function handleRectTransform(layerDesc, transform, result) {
     try {
         if (layerDesc.boundsNoEffects) {
-            const parsedRule = rule.parseRule(result.name);
-            result.name = parsedRule.name;
-            const transform = parsedRule.transform;
-            result.components = parsedRule.components;
             // 检查是否是最上层节点（没有parent）
             if (layerDesc.parentLayerID == -1) {
                 // 最上层节点使用静态布局
                 result.rectTransform = handleRectTransformLayerGourp0(layerDesc.boundsNoEffects, doc);
             } else {
                 // 根据transform类型处理rectTransform
-                parent = await getLayerFullInfo(layerDesc.parentLayerID, docId)
+                parent = await getLayerInfo(layerDesc.parentLayerID)
                 switch (transform) {
                     case "middleCenter":
                         result.rectTransform = handleRectTransform0(layerDesc.boundsNoEffects, parent.boundsNoEffects);

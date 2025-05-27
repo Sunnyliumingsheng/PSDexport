@@ -20,6 +20,7 @@ function parseDefaultParams(params) {
       if (!isNaN(value.trim())&& value.trim()!=""){
         paramObj[key.trim()] = Number(value.trim())
       }
+      paramObj[key.trim()] = value.trim()
     } else {
       // 如果没有值，就认为是一个bool类型并且为true
       paramObj[key.trim()] = true

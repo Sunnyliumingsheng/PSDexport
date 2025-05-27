@@ -10,7 +10,7 @@ function handleText(layerDesc, result) {
     }
     : null;
   result.textLayerData.textAlign = layerDesc.textKey.paragraphStyleRange?.[0]?.paragraphStyle?.align?._value || "left";
-  result.textLayerData.haveShadow=(layerDesc.layerEffects.dropShadow!=null)
+  result.textLayerData.haveShadow=(layerDesc?.layerEffects?.dropShadow!=null)
 }
 
 module.exports = { handleText }

@@ -13,7 +13,8 @@
                     "description":"这个prefab的名字",
                     "appearance":"prefab名称",
                     "type":"text",
-                    "default":"默认参数名"
+                    "default":"默认参数名",
+                    "csType":"string"
                 }
             ]
         },

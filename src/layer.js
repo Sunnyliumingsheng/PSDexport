@@ -1,6 +1,6 @@
 const photoshop = require("photoshop");
 const { batchPlay } = photoshop.action;
-const rule = require("./rule.js");
+const parseRule = require("./rule.js").parseRule;
 const app = require("photoshop").app
 const doc = app.activeDocument;
 const handleRectTransform = require("./GeneralHandle/rectTransform.js").handleRectTransform;
@@ -32,12 +32,20 @@ function getLayerFullInfo(layerId, docId) {
 async function extractUsefulLayerInfo(layerDesc, docId) {
   const result = {};
   // 通用基本信息
-  result.name = layerDesc.name || "";
   result.id = layerDesc.layerID;
   result.visible = layerDesc.visible;
   result.opacity = (layerDesc.opacity ?? 255) / 255;
+  // 处理component
+  const parsedResult = parseRule(layerDesc.name)
+  if (parsedResult.components.length!=0) {
+    result.name = parsedResult.name
+    result.components = JSON.parse(JSON.stringify(parsedResult.components))
+  }else{
+    result.name = layerDesc.name
+  }
+
   // 这里解析处理图层的rectTransform，并直接以值的形式保存到result，让unity的脚本能超级方便的处理
-  await handleRectTransform(layerDesc, docId, result)
+  await handleRectTransform(layerDesc, parsedResult.transform, result)
   handleAllKind(layerDesc, result)
 
   return result;
