@@ -15,10 +15,10 @@ function generalInitComponent(result, componentElement) {
         })
     }
 }
-function generalInitParameter(result,componentElement, parameterElement) {
-    if (result.components.length!= 0) {
+function generalInitParameter(Parsedresult,componentElement, parameterElement) {
+    if (Parsedresult.components.length!= 0) {
        // 存在组件，开始遍历组件 
-       result.components.forEach(component => {
+       Parsedresult.components.forEach(component => {
         if ("component_" + component.name == componentElement.id) {
            // 找到组件，开始遍历参数
            if (component.parameters!=null) {

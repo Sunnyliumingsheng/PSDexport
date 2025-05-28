@@ -12,7 +12,6 @@ function loadComponent(id, layerName) {
 
     const div = document.getElementById(id)
     let componentList = getLayerKindConfig(id);
-    console.log("组件列表", componentList)
     if (componentList == null) {
         console.log("没有找到组件列表, id:", id)
         return;

@@ -1,8 +1,11 @@
+const getActiveLayer = require('./src/Layer/getActiveLayer.js').getActiveLayer;
+const getLayerInfo = require("./src/Layer/getLayerInfo.js").getLayerInfo;
 const config = require('./config/config.js').config;
 const host = require('uxp').host;
 const listenActiveLayerChangeCallback = require("./src/Layer/ListenActiveLayerChangeCallback.js").listenActiveLayerChangeCallback
 const listenActiveLayerChangeEvent = require("./src/Layer/listenActiveLayerChangeEvent.js").listenActiveLayerChangeEvent
 const loadPage = require("./src/loadPage.js").loadPage
+const { action } = require("photoshop");
 
 function main() {
 
@@ -17,8 +20,13 @@ function main() {
   listenActiveLayerChangeEvent(listenActiveLayerChangeCallback);
 
 }
+// testMode == true
 function test() {
-
+  action.addNotificationListener(["select"], function () {
+    const layer = getActiveLayer()
+    const layerDesc = getLayerInfo(layer._id)
+    console.log(layerDesc)
+  });
 }
 
 ////////////////////////////////////////// ignore below
