@@ -1,5 +1,5 @@
-const getLayerInfo=require("../Layer/getLayerInfo.js").getLayerInfo
-const doc=require("photoshop").app.activeDocument
+const getLayerInfo = require("../Layer/getLayerInfo.js").getLayerInfo
+const doc = require("photoshop").app.activeDocument
 ///////////////这些是处理rectTransform的函数/////////////////////
 // 处理名字和rectTransform
 async function handleRectTransform(layerDesc, transform, result) {
@@ -9,21 +9,30 @@ async function handleRectTransform(layerDesc, transform, result) {
             if (layerDesc.parentLayerID == -1) {
                 // 最上层节点使用静态布局
                 result.rectTransform = handleRectTransformLayerGourp0(layerDesc.boundsNoEffects, doc);
+                result.rectTransform.anchor = [
+                    { x: 0, y: 0 },
+                    { x: 1, y: 1 }]
             } else {
                 // 根据transform类型处理rectTransform
                 parent = await getLayerInfo(layerDesc.parentLayerID)
+                result.rectTransform = calculateRectTransform(layerDesc.boundsNoEffects, parent.boundsNoEffects)
                 switch (transform) {
                     case "middleCenter":
-                        result.rectTransform = handleRectTransform0(layerDesc.boundsNoEffects, parent.boundsNoEffects);
+                        result.rectTransform.anchor = [
+                            { x: 0.5, y: 0.5 },
+                            { x: 0.5, y: 0.5 }
+                        ]
                         break;
                     case "stretchStretch":
-                        result.rectTransform = handleRectTransform1(
-                            layerDesc.boundsNoEffects,
-                            parent.boundsNoEffects
-                        );
+                        result.rectTransform.anchor = [
+                            { x: 0, y: 0 },
+                            { x: 1, y: 1 }]
                         break;
                     default:
-                        result.rectTransform = handleRectTransform0(layerDesc.boundsNoEffects, parent.boundsNoEffects);
+                        result.rectTransform.anchor = [
+                            { x: 0.5, y: 0.5 },
+                            { x: 0.5, y: 0.5 }
+                        ]
                         break;
                 }
             }
@@ -33,72 +42,78 @@ async function handleRectTransform(layerDesc, transform, result) {
         console.log(err)
     }
 }
+function calculateRectTransform(boundsNoEffects, parentBounds) {
+    const width = boundsNoEffects.width._value;
+    const height = boundsNoEffects.height._value;
+    const parentWidth = parentBounds.right._value - parentBounds.left._value;
+    const parentHeight = parentBounds.bottom._value - parentBounds.top._value;
+    const centerX = boundsNoEffects.left._value + width / 2;
+    const centerY = boundsNoEffects.top._value + height / 2;
+    const parentCenterX = parentBounds.left._value + parentWidth / 2;
+    const parentCenterY = parentBounds.top._value + parentHeight / 2;
+    // 适用于 anchorMin = anchorMax 的情况，例如 middleCenter
+    const anchoredPosition = {
+        x: centerX - parentCenterX,
+        y: -(centerY - parentCenterY)  // 注意 Photoshop 是向下 Y 正，Unity 是向上
+    };
+    const sizeDelta = {
+        x: width,
+        y: height
+    };
+    // 适用于 anchorMin = (0, 0), anchorMax = (1, 1) 的 stretch 模式
+    const offsetMin = {
+        x: boundsNoEffects.left._value - parentBounds.left._value,
+        y: parentBounds.bottom._value - boundsNoEffects.bottom._value
+    };
+    const offsetMax = {
+        x: -(parentBounds.right._value - boundsNoEffects.right._value),
+        y: -(boundsNoEffects.top._value - parentBounds.top._value)
+    };
+    const pivot = { x: 0.5, y: 0.5 }
+    return {
+        pivot,
+        anchoredPosition,
+        sizeDelta,
+        offsetMin,
+        offsetMax
+    };
+}
 
-// 编号0的处理办法，只可以处理静态不拉伸的UI，anchor为(0,1)(0,1),pivot为(0.5,0.5)
-function handleRectTransform0(boundsNoEffects, parentBounds) {
-    rectTransform = {
-        type: "middleCenter",
-        anchor: [
-            { x: 0.5, y: 0.5 },
-            { x: 0.5, y: 0.5 }
-        ],
-        pivot: {
-            x: 0.5,
-            y: 0.5
-        },
-        middleCenterModeData: {
-            posX: boundsNoEffects.left._value + boundsNoEffects.width._value / 2 - parentBounds.left._value - parentBounds.width._value / 2,
-            posY: parentBounds.top._value + parentBounds.height._value / 2 - boundsNoEffects.top._value - boundsNoEffects.height._value / 2,
-            width: boundsNoEffects.width._value,
-            height: boundsNoEffects.height._value,
-        }
-    }
-    return rectTransform
-}
-// 编号为1的处理方案，可以处理动态的UI，anchor为(0,0)(1,1),pivot为(0.5,0.5)
-function handleRectTransform1(boundsNoEffects, parentBounds) {
-    rectTransform = {
-        type: "stretchStretch",
-        anchor: [
-            { x: 0, y: 0 },
-            { x: 1, y: 1 }
-        ],
-        pivot: {
-            x: 0.5,
-            y: 0.5
-        },
-        left: boundsNoEffects.left._value - parentBounds.left._value,
-        top: boundsNoEffects.top._value - parentBounds.top._value,
-        // 这里需要获取父节点的宽度和高度用于计算,因为PS和unity坐标计算的方式不一样
-        right: parentBounds.right._value - boundsNoEffects.right._value,
-        bottom: parentBounds.bottom._value - boundsNoEffects.bottom._value,
-    }
-    return rectTransform
-}
-// 顶部的的处理办法，用来处理最顶部的组件，因为没有parent，anchor为(0,1)(0,1),pivot为(0.5,0.5)
+
+
 function handleRectTransformLayerGourp0(boundsNoEffects, doc) {
-
-  rectTransform = {
-    type: "stretchStretch",
-    anchor: [
-      { x: 0, y: 0 },
-      { x: 1, y: 1 }
-    ],
-    pivot: {
-      x: 0.5,
-      y: 0.5
-    },
-    stretchStretchModeData: {
-      left: boundsNoEffects.left._value,
-      top: boundsNoEffects.top._value,
-      // 这里需要获取父节点的宽度和高度用于计算,因为PS和unity坐标计算的方式不一样
-      right: doc.width - boundsNoEffects.right._value,
-      bottom: doc.height - boundsNoEffects.bottom._value,
-    }
-  }
-  return rectTransform
+    const width = boundsNoEffects.width._value;
+    const height = boundsNoEffects.height._value;
+    const docWidth = doc.width;
+    const docHeight = doc.height;
+    const offsetMin = {
+        x: boundsNoEffects.left._value,
+        y: docHeight - boundsNoEffects.bottom._value
+    };
+    const offsetMax = {
+        x: -(docWidth - boundsNoEffects.right._value),
+        y: -(boundsNoEffects.top._value)
+    };
+    const anchoredPosition = {
+        x: 0,
+        y: 0
+    };
+    const sizeDelta = {
+        x: width,
+        y: height
+    };
+    const pivot = {
+        x: 0.5,
+        y: 0.5
+    };
+    return {
+        pivot,
+        anchoredPosition,
+        sizeDelta,
+        offsetMin,
+        offsetMax
+    };
 }
-
-module.exports={
+module.exports = {
     handleRectTransform,
 }
