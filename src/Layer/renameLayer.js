@@ -1,13 +1,14 @@
-const executeAsModal= require("photoshop").core.executeAsModal
+const executeAsModal = require("photoshop").core.executeAsModal
 
-function renameLayer(layer,newName){
-    executeAsModal(function() {
+
+function renameLayer(layer, newName) {
+    executeAsModal(function () {
         if (layer != null) {
             layer.name = newName;
         }
-    }, {"showDialog": false});
+    }, { "showDialog": false });
 }
 
-module.exports={
+module.exports = {
     renameLayer
 }

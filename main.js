@@ -9,15 +9,16 @@ const { action } = require("photoshop");
 
 function main() {
 
-  // 加载首页
 
   document.getElementById("loadPageOutput").addEventListener("click", function outputPage() {
     loadPage("output")
   })
-  loadPage("index")
 
   // 循环事件处理
   listenActiveLayerChangeEvent(listenActiveLayerChangeCallback);
+
+  loadPage("index")
+
 
 }
 // testMode == true

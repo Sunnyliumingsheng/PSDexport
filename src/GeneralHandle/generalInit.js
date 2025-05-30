@@ -15,6 +15,7 @@ function generalInitComponent(result, componentElement) {
         })
     }
 }
+// 给组件提前赋值
 function generalInitParameter(Parsedresult,componentElement, parameterElement) {
     if (Parsedresult.components.length!= 0) {
        // 存在组件，开始遍历组件 

@@ -1,5 +1,14 @@
+const getActiveLayer = require("../Layer/getActiveLayer.js").getActiveLayer
+const parseRule = require("../rule.js").parseRule
+const getAnchor=require("../dynamic/rectTransform.js").getAnchor
+const resultRenameActiveLayer = require("../Layer/resultRenameActiveLayer.js").resultRenameActiveLayer
+
 const getLayerInfo = require("../Layer/getLayerInfo.js").getLayerInfo
 const doc = require("photoshop").app.activeDocument
+const splitAnchorName = require("../dynamic/rectTransform.js").splitAnchorName
+const updateAnchor = require("../dynamic/rectTransform.js").updateAnchor
+
+
 ///////////////这些是处理rectTransform的函数/////////////////////
 // 处理名字和rectTransform
 async function handleRectTransform(layerDesc, transform, result) {
@@ -16,25 +25,7 @@ async function handleRectTransform(layerDesc, transform, result) {
                 // 根据transform类型处理rectTransform
                 parent = await getLayerInfo(layerDesc.parentLayerID)
                 result.rectTransform = calculateRectTransform(layerDesc.boundsNoEffects, parent.boundsNoEffects)
-                switch (transform) {
-                    case "middleCenter":
-                        result.rectTransform.anchor = [
-                            { x: 0.5, y: 0.5 },
-                            { x: 0.5, y: 0.5 }
-                        ]
-                        break;
-                    case "stretchStretch":
-                        result.rectTransform.anchor = [
-                            { x: 0, y: 0 },
-                            { x: 1, y: 1 }]
-                        break;
-                    default:
-                        result.rectTransform.anchor = [
-                            { x: 0.5, y: 0.5 },
-                            { x: 0.5, y: 0.5 }
-                        ]
-                        break;
-                }
+                result.rectTransform.anchor= getAnchor(transform)
             }
         }
     }
@@ -114,6 +105,48 @@ function handleRectTransformLayerGourp0(boundsNoEffects, doc) {
         offsetMax
     };
 }
+
+function rectTransformInit(result, radioGroupElement, componentName) {
+    if (result.transform == null) {
+        // 并没有设置anchor 直接设置为默认值但是为了美观不修改图层名字而是选择到这个默认值
+        const radioHorizontal = document.getElementById(radioGroupElement.id + "radio_" + "center")
+        const radioVertical = document.getElementById(radioGroupElement.id + "radio_" + "middle")
+        radioHorizontal.setAttribute("checked")
+        radioVertical.setAttribute("checked")
+        return
+    }
+    const transformName = result.transform
+    const splitName = splitAnchorName(transformName)
+    if (splitName == null) {
+        throw new Error("rectTransform 格式错误", transformName)
+    }
+    const radioHorizontalName = splitName[0]
+    const radioVerticalName = splitName[1]
+    if (componentName == "horizontalAnchor") {
+        const radioHorizontal = document.getElementById(radioGroupElement.id + "radio_" + radioHorizontalName)
+        radioHorizontal.setAttribute("checked")
+    }
+    if (componentName == "verticalAnchor") {
+        console.log("rect", radioGroupElement.id + "radio_" + radioVerticalName)
+        const radioVertical = document.getElementById(radioGroupElement.id + "radio_" + radioVerticalName)
+        radioVertical.setAttribute("checked")
+    }
+}
+
+function rectTransformCallback(radioGroupElement) {
+    const LayerName = getActiveLayer().name
+    const result = parseRule(LayerName)
+    radioGroupElement.addEventListener("change", event => {
+        const newTrasform = updateAnchor(result.transform, event.target.value)
+        result.transform = newTrasform
+        resultRenameActiveLayer(result)
+    })
+}
+
+
+
 module.exports = {
     handleRectTransform,
+    rectTransformInit,
+    rectTransformCallback
 }

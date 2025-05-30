@@ -19,6 +19,10 @@ async function getLayersData() {
     result.canvasLayerData = {}
     result.canvasLayerData.width = doc.width
     result.canvasLayerData.height = doc.height
+    if(config.default.screen.width!=0 && config.default.screen.height!=0){
+        result.canvasLayerData.width = config.default.screen.width
+        result.canvasLayerData.height = config.default.screen.height
+    }
     // todo: 这里应该添加一个选择框，用来选择 overlay camera worldSpace
     result.canvasLayerData.renderMode = "camera"
     try {

@@ -1,7 +1,3 @@
-// 支持的transform类型
-const TRANSFORM_TYPES = ['middleCenter', 'stretchStretch'];
-
-
 
 // 处理自定义组件的默认方法
 function parseDefaultParams(params) {
@@ -53,14 +49,9 @@ function parseRule(ruleString) {
   if (firstPart.includes('/')) {
     [name, transform] = firstPart.split('/');
     transform = transform.trim();
-    if (!TRANSFORM_TYPES.includes(transform)) {
-      console.warn(`警告: 未知的transform类型 '${transform}'，将使用默认值 'middleCenter' 并且名称将不进行解析直接使用原值`);
-      transform = TRANSFORM_TYPES[0];
-      name = ruleString
-    }
   } else {
     name = firstPart;
-    transform = TRANSFORM_TYPES[0];// 默认为middleCenter
+    transform = "centerMiddle";// 默认为centerMiddle
   }
 
   // 解析组件

@@ -41,7 +41,7 @@ async function extractUsefulLayerInfo(layerDesc, docId) {
     result.name = parsedResult.name
     result.components = JSON.parse(JSON.stringify(parsedResult.components))
   }else{
-    result.name = layerDesc.name
+    result.name = parsedResult.name
   }
 
   // 这里解析处理图层的rectTransform，并直接以值的形式保存到result，让unity的脚本能超级方便的处理

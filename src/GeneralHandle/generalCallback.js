@@ -63,6 +63,12 @@ function autoFillParameterDefaultValue(oldName, componentName, parameterConfigIn
 
 }
 
+function generalRadioGroupCallback(newElement,configInfo){
+    newElement.addEventListener("change",function(event){
+        let layer=getActiveLayer()
+        
+    })
+}
 
 
-module.exports = { generalComponentCallback, generalParameterCallback }
+module.exports = { generalComponentCallback, generalParameterCallback,generalRadioGroupCallback }

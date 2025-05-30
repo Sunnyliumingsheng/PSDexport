@@ -5,10 +5,14 @@ function getLayerKindConfig(id) {
     if (id == "index") {
         return null
     }
-
+    var universalItems
     for (const [category, items] of Object.entries(config.components)) {
+        if (category=="universal"){
+            universalItems = items
+            continue
+        }
         if (id == category) {
-            return items
+            return (universalItems ?? []).concat(items ?? []);
         }
     }
 
