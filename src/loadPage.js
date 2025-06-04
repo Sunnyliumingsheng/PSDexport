@@ -43,32 +43,11 @@ function loadPage(id) {
             outputListen()
             break;
         case "index":
-            const spRadioGroup=document.createElement("sp-radio-group")
-            const spRadioLeft=document.createElement("sp-radio")
-            const spRadioRight=document.createElement("sp-radio")
-            const spRadioCenter=document.createElement("sp-radio")
-            const spRadioStretch=document.createElement("sp-radio")
-            spRadioGroup.appendChild(spRadioLeft)
-            spRadioGroup.appendChild(spRadioRight)
-            spRadioGroup.appendChild(spRadioCenter)
-            spRadioGroup.appendChild(spRadioStretch)
-            spRadioLeft.textContent="左对齐"
-            spRadioRight.textContent="右对齐"
-            spRadioCenter.textContent="居中对齐"
-            spRadioStretch.textContent="拉伸"
-
-            spRadioGroup.setAttribute("column")
-            spRadioCenter.value="center"
-            spRadioLeft.value="left"
-            spRadioRight.value="right"
-            spRadioStretch.value="stretch"
-            spRadioGroup.class="radio"
-
-            spRadioRight.setAttribute("checked")
-            document.getElementById(id).appendChild(spRadioGroup)
-            spRadioGroup.addEventListener("change",event=>{
-                console.log(event.target.value)
-            })
+            const prompt= document.createElement("label")
+            prompt.textContent="选择一个图层即可开始"
+            prompt.id="prompt"
+            document.getElementById(id).appendChild(prompt)
+            
         default:
             //将所有的div都设置为不可见
             const activeLayer = getActiveLayer()

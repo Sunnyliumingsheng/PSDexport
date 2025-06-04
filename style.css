@@ -1,6 +1,66 @@
-div.view{
-    display: none;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #e4e4e4;
 }
-checkbox{
-    color: brown;
+
+div#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.componentDiv {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+label {
+    font-size: 16px;
+    color: #333333;
+    margin-bottom: 5px;
+}
+
+sp-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+sp-radio {
+    padding: 10px;
+    background-color: #cccccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: #333333;
+}
+
+sp-radio.checked {
+    background-color: #0056b3;
+    color: #ffffff;
+}
+
+sp-radio:hover {
+    background-color: #bbbbbb;
+}
+
+input:focus,
+sp-radio.checked {
+    outline: none;
+    box-shadow: 0 0 5px #0056b3;
 }

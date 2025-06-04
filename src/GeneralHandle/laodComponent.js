@@ -7,8 +7,11 @@ const generalInitParameter = require("./generalInit.js").generalInitParameter
 const parseRule = require("../rule.js").parseRule
 const rectTransformInit = require("./rectTransform.js").rectTransformInit
 const rectTransformCallback = require("./rectTransform.js").rectTransformCallback
+const radioGroupInit = require("./generalInit.js").radioGroupInit
+const radioGroupCallback = require("./generalCallback.js").radioGroupCallback
 
 function loadComponent(id, layerName) {
+    // 注意这个result不能乱用，只能在init中使用，否则会出现问题。因为无法事实获取到layerName
     const result = parseRule(layerName)
     const div = document.getElementById(id)
     let componentList = getLayerKindConfig(id);
@@ -28,25 +31,44 @@ function loadComponent(id, layerName) {
 
         switch (component.type) {
             case "radioGroup": {
-                if (component.name != "horizontalAnchor" && component.name != "verticalAnchor") {
-                    throw new Error("必须写入自定义的处理方式,如果只想打标签请使用checkbox")
-                }
                 const spRadioGroup = document.createElement("sp-radio-group")
+                newDiv.appendChild(spRadioGroup)
                 spRadioGroup.setAttribute("column")
                 spRadioGroup.id = "radioGroup_" + component.name
                 component.parameters.forEach((parameter) => {
                     const spRadio = document.createElement("sp-radio")
+                    spRadioGroup.appendChild(spRadio)
                     spRadio.textContent = parameter.appearance
                     spRadio.value = parameter.name
                     spRadio.id = "radioGroup_" + component.name + "radio_" + parameter.name
-                    spRadioGroup.appendChild(spRadio)
                 })
-                newDiv.appendChild(spRadioGroup)
-                rectTransformInit(result, spRadioGroup, component.name)
-                rectTransformCallback(spRadioGroup)
+                switch (component.name) {
+                    case "horizontalAnchor": {
+                        rectTransformInit(result, spRadioGroup, component.name)
+                        rectTransformCallback(spRadioGroup)
+                        break;
+                    }
+                    case "verticalAnchor": {
+                        rectTransformInit(result, spRadioGroup, component.name)
+                        rectTransformCallback(spRadioGroup)
+                        break;
+                    }
+                    default: {
+                        // 默认添加取消按钮
+                        const spRadio = document.createElement("sp-radio")
+                        spRadioGroup.appendChild(spRadio)
+                        spRadio.textContent = "取消选择"
+                        spRadio.value = "AutoUICancel"
+                        spRadio.id = "radioGroup_" + component.name + "radio_" + "AutoUICancel"
+
+                        radioGroupInit(result, component)
+                        radioGroupCallback(spRadioGroup)
+                        break;
+                    }
+                }
                 break;
             }
-            default: {
+            case "checkbox": {
                 // 生成一个组件的input和label
                 const componentElement = document.createElement("input")
                 componentElement.id = "component_" + component.name
@@ -81,6 +103,9 @@ function loadComponent(id, layerName) {
                     newDiv.appendChild(parameterElement)
                 })
                 break;
+            }
+            default: {
+               throw new Error("未知组件类型", component.type) 
             }
         }
 

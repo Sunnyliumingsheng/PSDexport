@@ -1,6 +1,6 @@
 const getActiveLayer = require("../Layer/getActiveLayer.js").getActiveLayer
 const parseRule = require("../rule.js").parseRule
-const getAnchor=require("../dynamic/rectTransform.js").getAnchor
+const getAnchor = require("../dynamic/rectTransform.js").getAnchor
 const resultRenameActiveLayer = require("../Layer/resultRenameActiveLayer.js").resultRenameActiveLayer
 
 const getLayerInfo = require("../Layer/getLayerInfo.js").getLayerInfo
@@ -25,7 +25,7 @@ async function handleRectTransform(layerDesc, transform, result) {
                 // 根据transform类型处理rectTransform
                 parent = await getLayerInfo(layerDesc.parentLayerID)
                 result.rectTransform = calculateRectTransform(layerDesc.boundsNoEffects, parent.boundsNoEffects)
-                result.rectTransform.anchor= getAnchor(transform)
+                result.rectTransform.anchor = getAnchor(transform)
             }
         }
     }
@@ -127,16 +127,15 @@ function rectTransformInit(result, radioGroupElement, componentName) {
         radioHorizontal.setAttribute("checked")
     }
     if (componentName == "verticalAnchor") {
-        console.log("rect", radioGroupElement.id + "radio_" + radioVerticalName)
         const radioVertical = document.getElementById(radioGroupElement.id + "radio_" + radioVerticalName)
         radioVertical.setAttribute("checked")
     }
 }
 
 function rectTransformCallback(radioGroupElement) {
-    const LayerName = getActiveLayer().name
-    const result = parseRule(LayerName)
     radioGroupElement.addEventListener("change", event => {
+        const LayerName = getActiveLayer().name
+        const result = parseRule(LayerName)
         const newTrasform = updateAnchor(result.transform, event.target.value)
         result.transform = newTrasform
         resultRenameActiveLayer(result)
